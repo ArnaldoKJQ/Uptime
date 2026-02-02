@@ -1,6 +1,6 @@
 # 🌐 Web-Status-Telegram
 
-A lightweight Python-based monitoring tool that tracks the availability of your websites and sends instant status updates to a Telegram bot.
+A lightweight bash monitoring tool that tracks the availability of your websites and sends instant status updates to a Telegram bot.
 
 ---
 
