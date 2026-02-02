@@ -15,20 +15,23 @@
 #   echo "✅ Page loaded successfully, size: $STATUS bytes"
 # fi
 
+#!/bin/bash
+
+# Check that env vars exist
+echo "TELEGRAM_TOKEN length: ${#TELEGRAM_TOKEN}"
+echo "TELEGRAM_CHAT_ID: $TELEGRAM_CHAT_ID"
+
 URL="https://megahtex.com/"
-
 STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$URL")
-
 MESSAGE="Website status check\nURL: $URL\nStatus code: $STATUS"
 
-# Debug output
-echo "Telegram token length: ${#TELEGRAM_TOKEN}"  # sanity check
-echo "Telegram chat ID: $TELEGRAM_CHAT_ID"
-echo "Message: $MESSAGE"
+echo "Message to send:"
+echo -e "$MESSAGE"
 
-# Send Telegram message and capture response
+# Send message to Telegram and show response
 RESPONSE=$(curl -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
   -d chat_id="${TELEGRAM_CHAT_ID}" \
   -d text="$MESSAGE")
 
-echo "Telegram API response: $RESPONSE"
+echo "Telegram response: $RESPONSE"
+
