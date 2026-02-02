@@ -1,26 +1,28 @@
-# 🌐 Web-Status-Telegram
+# Web-Status-Github
 
-A lightweight bash monitoring tool that tracks the availability of your websites and sends instant status updates to a Telegram bot.
+Python-based uptime monitoring tool designed to run as a **GitHub Action**. It periodically pings URLs and sends status alerts via **Telegram**.
 
----
+## ⚙️ Technical Specs
+* **Runtime:** GitHub Actions (`ubuntu-latest`)
+* **Language:** Python 3.10+
+* **Communication:** Telegram Bot API
+* **Trigger:** `cron` schedule + `workflow_dispatch`
 
-## 🚀 Overview
-**Web-Status-Telegram** is designed for developers and sysadmins who need a simple, no-frills way to monitor uptime. It pings a list of URLs and alerts you immediately if a service becomes unreachable or returns an error code.
+## 🛠 Configuration (Secrets)
+Do not store credentials in the script. Use **Settings > Secrets and variables > Actions** in your repo to add:
 
-## ✨ Key Features
-* **Automated Monitoring:** Periodic HTTP health checks for multiple URLs.
-* **Instant Notifications:** Real-time alerts via Telegram Bot API.
-* **Status Tracking:** Reports both "Down" events and "Recovery" (Up) events.
-* **Minimalist Design:** Easy to deploy on a VPS, Raspberry Pi, or local machine.
+| Secret | Description |
+| :--- | :--- |
+| `TELEGRAM_TOKEN` | API token from @BotFather |
+| `CHAT_ID` | Telegram Chat ID |
 
-## 🛠️ Requirements
-* A Telegram Bot Token (from [@BotFather](https://t.me/botfather))
+## ⚠️ Known Issue: GitHub Cron Inconsistency
+Running monitors on GitHub Actions has a specific disadvantage regarding timing:
+* **Latency:** The `schedule` event is "best-effort." A job set for every 15 minutes (`*/15 * * * *`) often executes with a **5 to 30 minute delay**.
+* **Variable Intervals:** Because GitHub scales based on global load, intervals between checks are not consistent.
+* **Skipped Runs:** During high platform traffic, scheduled runs can be skipped entirely.
+* **Usage Case:** Suitable for general uptime tracking, but **not** for high-precision or mission-critical alerting.
 
-### ⚠️ Limitations: GitHub Actions Scheduling
-This tool runs via a **GitHub Actions YAML workflow**, please keep the following in mind:
-
-* **Inconsistent Intervals:** The GitHub Actions `schedule` event is a "best-effort" service. Even if you set it to run every 15 minutes (`*/15 * * * *`), execution can be delayed significantly based on GitHub's current server load.
-* **Execution Delays:** It is common for scheduled tasks to be delayed by **5 to 20 minutes** beyond the requested time. In some cases, if the queue is highly congested, a scheduled run might be skipped entirely.
-* **Not for Mission-Critical Monitoring:** Because of these unpredictable delays, this repository is excellent for general status tracking but should not be relied upon for mission-critical services that require precise, high-frequency alerts.
-
-> **Tip:** For a guaranteed 15-minute interval, it is recommended to host the script on a **VPS**
+## 🚀 Setup
+1. **Define Targets:** Add your URL to `UpTime.sh`.
+3. **Deploy:** The workflow in `.github/workflows/` will trigger automatically.
