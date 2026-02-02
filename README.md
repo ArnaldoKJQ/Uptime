@@ -4,7 +4,6 @@ Python-based uptime monitoring tool designed to run as a **GitHub Action**. It p
 
 ## ⚙️ Technical Specs
 * **Runtime:** GitHub Actions (`ubuntu-latest`)
-* **Language:** Python 3.10+
 * **Communication:** Telegram Bot API
 * **Trigger:** `cron` schedule + `workflow_dispatch`
 
@@ -25,4 +24,4 @@ Running monitors on GitHub Actions has a specific disadvantage regarding timing:
 
 ## 🚀 Setup
 1. **Define Targets:** Add your URL to `UpTime.sh`.
-3. **Deploy:** The workflow in `.github/workflows/` will trigger automatically.
+2. **Deploy:** The workflow in `.github/workflows/` will trigger automatically.
