@@ -16,5 +16,5 @@ jobs:
           TELEGRAM_TOKEN: ${{ 8365333559:AAH7oCneaw61NSFHp-jVBnIW0QX8pHTgq-M }}
           TELEGRAM_CHAT_ID: ${{ 8528165371 }}
         run: |
-          chmod +x check.sh
-          ./check.sh
+          chmod +x UpTime.sh
+          ./UpTime.sh
