@@ -15,23 +15,25 @@
 #   echo "✅ Page loaded successfully, size: $STATUS bytes"
 # fi
 
-#!/bin/bash
+set -x  # print commands as they run
+set -o errexit  # exit on error
+set -o pipefail  # catch errors in pipes
+set -o nounset  # catch unset variables
 
-# Check that env vars exist
 echo "TELEGRAM_TOKEN length: ${#TELEGRAM_TOKEN}"
 echo "TELEGRAM_CHAT_ID: $TELEGRAM_CHAT_ID"
 
 URL="https://megahtex.com/"
-STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$URL")
-MESSAGE="Website status check\nURL: $URL\nStatus code: $STATUS"
+STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 "$URL") || STATUS="000"
+echo "HTTP status: $STATUS"
 
-echo "Message to send:"
-echo -e "$MESSAGE"
+MESSAGE="Website status check%0AURL: $URL%0AStatus code: $STATUS"
+echo "Sending message: $MESSAGE"
 
-# Send message to Telegram and show response
-RESPONSE=$(curl -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
-  -d chat_id="${TELEGRAM_CHAT_ID}" \
-  -d text="$MESSAGE")
+RESPONSE=$(curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+  -d chat_id="$TELEGRAM_CHAT_ID" \
+  -d text="$MESSAGE" \
+  -w "\nHTTP_CODE:%{http_code}\n") || RESPONSE="Telegram request failed"
 
 echo "Telegram response: $RESPONSE"
 
